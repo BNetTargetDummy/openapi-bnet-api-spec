@@ -1,0 +1,91 @@
+Achievement-Schema:
+  properties:
+    accountWide:
+      type: boolean
+    criteria:
+      type: array
+      items:
+        $ref: "#/components/schemas/AchievementCriteriaSchema"
+    description:
+      type: string
+    factionId:
+      type: integer
+      format: int32
+    icon:
+      type: string
+    id:
+      type: integer
+      format: int32
+    points:
+      type: integer
+      format: int32
+    reward:
+      type: string
+    rewardItems:
+      type: array
+      items:
+        $ref: "#/components/schemas/AchievementRewardItemsSchema"
+    title:
+      type: string
+Achievement.Criteria-Schema:
+  properties:
+    description:
+      type: string
+    id:
+      type: integer
+      format: int32
+    max:
+      type: integer
+      format: int32
+    orderIndex:
+      type: integer
+      format: int32
+Achievement.RewardItems-Schema:
+  properties:
+    appearance:
+      type: object
+    armor:
+      type: integer
+      format: int32
+    artifactAppearanceId:
+      type: integer
+      format: int32
+    artifactId:
+      type: integer
+      format: int32
+    artifactTraits:
+      type: array
+      items: {}
+    bonusLists:
+      type: array
+      items: {}
+    context:
+      type: string
+    displayInfoId:
+      type: integer
+      format: int32
+    icon:
+      type: string
+    id:
+      type: integer
+      format: int32
+    itemLevel:
+      type: integer
+      format: int32
+    name:
+      type: string
+    quality:
+      type: integer
+      format: int32
+    relics:
+      type: array
+      items: {}
+    stats:
+      type: array
+      items: {}
+    tooltipParams:
+      type: object
+      properties:
+        timewalkerLevel:
+          type: integer
+          format: int32

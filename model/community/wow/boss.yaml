@@ -1,0 +1,55 @@
+BossMasterList-Schema:
+  properties:
+    bosses:
+      type: array
+      items:
+        $ref: "#/components/schemas/BossSchema"
+Boss-Schema:
+  properties:
+    availableInHeroicMode:
+      type: boolean
+    availableInNormlaMode:
+      type: boolean
+    description:
+      type: string
+    health:
+      type: integer
+      format: int32
+    heroicHealth:
+      type: integer
+      format: int32
+    heroicLevel:
+      type: integer
+      format: int32
+    id:
+      type: integer
+      format: int32
+    journalId:
+      type: integer
+      format: int32
+    level:
+      type: integer
+      format: int32
+    name:
+      type: string
+    npcs:
+      type: array
+      items:
+        $ref: "#/components/schemas/BossNpcsSchema"
+    urlSlug:
+      type: string
+    zoneId:
+      type: integer
+      format: int32
+Boss.Npcs-Schema:
+  properties:
+    creatureDisplayItem:
+      type: integer
+      format: int32
+    id:
+      type: integer
+      format: int32
+    name:
+      type: string
+    urlSlug:
+      type: string

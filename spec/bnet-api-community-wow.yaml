@@ -1,0 +1,1035 @@
+openapi: "3.0.0"
+info:
+  title: Battle.net World of Warcraft Community API
+  description: The public APIs for the Battle.net World of Warcraft community data.
+  version: "1.0.0"
+servers:
+  - url: "https://{hostname}/"
+    variables:
+      hostname:
+        default: 'us.api.battle.net'
+        description: Customer ID assigned by the service provider
+        enum:
+          - 'us.api.battle.net'
+          - 'eu.api.battle.net'
+          - 'kr.api.battle.net'
+          - 'tw.api.battle.net'
+          ## - 'sea.api.battle.net' Sea not supported yet
+          - 'api.battlenet.com.cn'
+paths:
+  /wow/achievement/{id}:
+    get:
+      summary: "Retrieve achievement"
+      description: "Retrieving an achievement item with a specific `id`."
+      parameters:
+        - name: id
+          in: path
+          description: "The `id` of the achievement to retrieve."
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - $ref: "#/components/parameters/Jsonp-Param"
+        - $ref: "#/components/parameters/Locale-Param"
+      security:
+        - apikey: []
+      tags:
+        - Achievements
+      responses:
+        "200":
+          description: "Retrieve a achievement object of an id."
+          content:
+            application/json:
+              schema:
+                $ref: "/model/community/wow/achievement.yaml#/Achievement-Schema"
+        default:
+          description: "Unexpected error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error-Schema"
+  /wow/auction/data/{realm}:
+    get:
+      summary: "Retrieve auction data status"
+      description: "Retrieve auction data status with a specific `realm`."
+      parameters:
+        - name: realm
+          in: path
+          description: "The `realm` of the auction house to retrieve."
+          required: true
+          schema:
+            type: string
+        - $ref: "#/components/parameters/Jsonp-Param"
+        - $ref: "#/components/parameters/Locale-Param"
+      security:
+        - apikey: []
+      tags:
+        - Auction
+        - Auction House
+        - Realm
+      responses:
+        "200":
+          description: "Retrieve auction of a realm."
+          content:
+            application/json:
+              schema:
+                $ref: "/model/community/wow/auction.yaml#/Auction-Schema"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                  $ref: "#/components/schemas/Error-Schema"
+  /wow/boss/:
+    get:
+      summary: "Retrieve boss master list"
+      description: "Retrieve a list of boss items."
+      parameters:
+        - $ref: "#/components/parameters/Jsonp-Param"
+        - $ref: "#/components/parameters/Locale-Param"
+      security:
+        - apikey: []
+      tags:
+        - Boss
+        - Master List
+      responses:
+        "200":
+          description: "Retrieve a list of boss objects."
+          content:
+            application/json:
+              schema:
+                $ref: "/model/community/wow/auction.yaml#/BossMasterList-Schema"
+        default:
+          description: "Unexpected error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error-Schema"
+  /wow/boss/{bossid}:
+    get:
+      summary: "Retrieve boss"
+      description: "Retreive a singel boss item with a specific `id`."
+      parameters:
+        - name: bossid
+          in: path
+          description: "The `bossid` of the boss to retrieve."
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - $ref: "#/components/parameters/Jsonp-Param"
+        - $ref: "#/components/parameters/Locale-Param"
+      security:
+        - apikey: []
+      tags:
+        - Boss
+      responses:
+        "200":
+          description: "Retrieve a boss object of an id."
+          content:
+            application/json:
+              schema:
+                $ref: "/model/community/wow/auction.yaml#/Boss-Schema"
+        default:
+          description: "Unexpected error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error-Schema"
+  /wow/challenge/{realm}:
+    get:
+      summary: "List challenge realm leaderboard"
+      description: "Retrieve a list of challenges with a realm leaderboard with a specific `realm`."
+      parameters:
+        - name: realm
+          in: path
+          description: "The `realm` of the boss to retrieve."
+          required: true
+          schema:
+            type: string
+        - $ref: "#/components/parameters/Jsonp-Param"
+        - $ref: "#/components/parameters/Locale-Param"
+      security:
+        - apikey: []
+      tags:
+        - Challenge
+        - Realm
+      responses:
+        "200":
+          description: "Retrieve a challenge object of a realm."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Achievement"
+        default:
+          description: "Unexpected error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error-Schema"
+  /wow/challenge/region:
+    get:
+      summary: "List challenge region leaderboard"
+      description: "Retrieve an array of challenge objects of the region leaderboard."
+      parameters:
+        - name: jspon
+          in: query
+          description: "Request data to be returned as a JsonP callback."
+          required: false
+          schema:
+            type: boolean
+        - name: locale
+          in: query
+          description: "The locale to use in the response."
+          required: false
+          schema:
+            $ref: "#/components/parameters/Locale-Param"
+      security:
+        - apikey: []
+      tags:
+        - Challenge
+        - Region
+      responses:
+        "200":
+          description: "Retrieve a challenge object with regions."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Achievement"
+        default:
+          description: "Unexpected error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error-Schema"
+  /wow/character/{realm}/{charactername}:
+    get:
+      summary: "Retrieve character profile."
+      description: "Retrieve a character object with a specific `realm` and `character`."
+      parameters:
+        - name: realm
+          in: path
+          description: "The `realm` of the boss to retrieve."
+          required: true
+          schema:
+            type: string
+        - name: charactername
+          in: path
+          description: "The `character name` to retrieve."
+          required: true
+          schema:
+            type: string
+        - name: fields
+          in: query
+          description: "Specifies what data you want to retrieve. Fields can be includes as a `,` separated list"
+          required: false
+          schema:
+            type: array
+            items:
+              $ref: "#/components/schemas/ParameterCharacterFields"
+            uniqueItems: true
+            example:
+              oneId:
+                summary: Example of a single field
+                value: [achievements] # ?ids=5
+              multipleIds:
+                summary: Example of multiple IDs
+                value: [achievements] # ?ids=1,5,7
+        - name: jspon
+          in: query
+          description: "Request data to be returned as a JsonP callback."
+          required: false
+          schema:
+            type: boolean
+        - name: locale
+          in: query
+          description: "The locale to use in the response."
+          required: false
+          schema:
+            $ref: "#/components/parameters/Locale-Param"
+      security:
+        - apikey: []
+      tags:
+        - Character
+      responses:
+        "200":
+          description: "Retrieve a character object."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Achievement"
+        default:
+          description: "Unexpected error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error-Schema"
+  /wow/data/battlegroups/:
+    get:
+      summary: "Retrieve data battlegroups"
+      description: ""
+      parameters:
+        - $ref: "#/components/parameters/Jsonp-Param"
+        - $ref: "#/components/parameters/Locale-Param"
+      security:
+        - apikey: []
+      tags:
+        - Battlegroups
+        - Data
+      responses:
+        "200":
+          description: "Retrieve a list of data battlegroup objects."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Achievement"
+        default:
+          description: "Unexpected error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error-Schema"
+  /wow/data/character/achievements:
+    get:
+      summary: "Retrieve data character achievements"
+      description: ""
+      parameters:
+        - $ref: "#/components/parameters/Jsonp-Param"
+        - $ref: "#/components/parameters/Locale-Param"
+      security:
+        - apikey: []
+      tags:
+        - Achievements
+        - Character
+        - Data
+      responses:
+        "200":
+          description: "Retrieve a list of data character achievement objects."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Achievement"
+        default:
+          description: "Unexpected error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error-Schema"
+  /wow/data/character/classes:
+    get:
+      summary: "Retrieve data character classes"
+      description: ""
+      parameters:
+        - $ref: "#/components/parameters/Jsonp-Param"
+        - $ref: "#/components/parameters/Locale-Param"
+      security:
+        - apikey: []
+      tags:
+        - Character
+        - Data
+        - Classes
+      responses:
+        "200":
+          description: "Retrieve a list of data character class objects."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Achievement"
+        default:
+          description: "Unexpected error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error-Schema"
+  /wow/data/character/races:
+    get:
+      summary: "Retrieve data character races"
+      description: ""
+      parameters:
+        - $ref: "#/components/parameters/Jsonp-Param"
+        - $ref: "#/components/parameters/Locale-Param"
+      security:
+        - apikey: []
+      tags:
+        - Character
+        - Data
+        - Races
+      responses:
+        "200":
+          description: "Retrieve a list of data character races objects."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Achievement"
+        default:
+          description: "Unexpected error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error-Schema"
+  /wow/data/guild/achievements:
+    get:
+      summary: "Retrieve data guild achievements"
+      description: ""
+      parameters:
+        - $ref: "#/components/parameters/Jsonp-Param"
+        - $ref: "#/components/parameters/Locale-Param"
+      security:
+        - apikey: []
+      tags:
+        - Achievements
+        - Guild
+        - Data
+      responses:
+        "200":
+          description: "Retrieve a list of data character races objects."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Achievement"
+        default:
+          description: "Unexpected error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error-Schema"
+  /wow/data/guild/perks:
+    get:
+      summary: "Retrieve data guild perks"
+      description: ""
+      parameters:
+        - $ref: "#/components/parameters/Jsonp-Param"
+        - $ref: "#/components/parameters/Locale-Param"
+      security:
+        - apikey: []
+      tags:
+        - Guild
+        - Data
+        - Perks
+      responses:
+        "200":
+          description: "Retrieve a list of data guild perks objects."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Achievement"
+        default:
+          description: "Unexpected error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error-Schema"
+  /wow/data/guild/rewards:
+    get:
+      summary: "Retrieve data guild rewards"
+      description: ""
+      parameters:
+        - $ref: "#/components/parameters/Jsonp-Param"
+        - $ref: "#/components/parameters/Locale-Param"
+      security:
+        - apikey: []
+      tags:
+        - Guild
+        - Data
+        - Rewards
+      responses:
+        "200":
+          description: "Retrieve a list of data guild rewards objects."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Achievement"
+        default:
+          description: "Unexpected error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error-Schema"
+  /wow/data/item/classes:
+    get:
+      summary: "Retrieve data item classes"
+      description: ""
+      parameters:
+        - $ref: "#/components/parameters/Jsonp-Param"
+        - $ref: "#/components/parameters/Locale-Param"
+      security:
+        - apikey: []
+      tags:
+        - Classes
+        - Data
+        - Item
+      responses:
+        "200":
+          description: "Retrieve a list of data item classes objects."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Achievement"
+        default:
+          description: "Unexpected error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error-Schema"
+  /wow/data/pet/types:
+    get:
+      summary: "Retrieve data pet types"
+      description: ""
+      parameters:
+        - $ref: "#/components/parameters/Jsonp-Param"
+        - $ref: "#/components/parameters/Locale-Param"
+      security:
+        - apikey: []
+      tags:
+        - Guild
+        - Data
+        - Types
+      responses:
+        "200":
+          description: "Retrieve a list of data pet types objects."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Achievement"
+        default:
+          description: "Unexpected error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error-Schema"
+  /wow/data/talents:
+    get:
+      summary: "Retrieve data talents"
+      description: ""
+      parameters:
+        - $ref: "#/components/parameters/Jsonp-Param"
+        - $ref: "#/components/parameters/Locale-Param"
+      security:
+        - apikey: []
+      tags:
+        - Guild
+        - Data
+        - Talents
+      responses:
+        "200":
+          description: "Retrieve a list of data talents objects."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Achievement"
+        default:
+          description: "Unexpected error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error-Schema"
+  /wow/guild/{realm}/{guildname}:
+    get:
+      summary: "Retrieve guild profile."
+      description: ""
+      parameters:
+        - name: realm
+          in: path
+          description: "The `realm` of the boss to retrieve."
+          required: true
+          schema:
+            type: string
+        - name: guildname
+          in: path
+          description: "The `guild name` to retrieve."
+          required: true
+          schema:
+            type: string
+        - name: fields
+          in: query
+          description: "Specifies what data you want to retrieve. Fields can be includes as a `,` separated list"
+          required: false
+          schema:
+            type: array
+            items:
+              $ref: "#/components/schemas/ParameterGuildFields"
+            uniqueItems: true
+            example:
+              oneId:
+                summary: Example of a single field
+                value: [achievements] # ?ids=5
+              multipleIds:
+                summary: Example of multiple IDs
+                value: [achievements] # ?ids=1,5,7
+        - $ref: "#/components/parameters/Jsonp-Param"
+        - $ref: "#/components/parameters/Locale-Param"
+      security:
+        - apikey: []
+      tags:
+        - Guild
+      responses:
+        "200":
+          description: "Retrieve a guild object."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Achievement"
+        default:
+          description: "Unexpected error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error-Schema"
+  /wow/item/{itemid}:
+    get:
+      summary: "Retrieve item"
+      description: ""
+      parameters:
+        - name: itemid
+          in: path
+          description: "The `id` of the item."
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - $ref: "#/components/parameters/Jsonp-Param"
+        - $ref: "#/components/parameters/Locale-Param"
+      security:
+        - apikey: []
+      tags:
+        - Item
+      responses:
+        "200":
+          description: "Retrieve an item object."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Achievement"
+        default:
+          description: "Unexpected error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error-Schema"
+  /wow/item/{setid}:
+    get:
+      summary: "Retrieve item set"
+      description: ""
+      parameters:
+        - name: setid
+          in: path
+          description: "The `id` of the set."
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - $ref: "#/components/parameters/Jsonp-Param"
+        - $ref: "#/components/parameters/Locale-Param"
+      security:
+        - apikey: []
+      tags:
+        - Item
+        - Set
+      responses:
+        "200":
+          description: "Retrieve an item set object with an id."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Achievement"
+        default:
+          description: "Unexpected error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error-Schema"
+  /wow/mount:
+    get:
+      summary: "Retrieve mount master list"
+      description: ""
+      parameters:
+        - $ref: "#/components/parameters/Jsonp-Param"
+        - $ref: "#/components/parameters/Locale-Param"
+      security:
+        - apikey: []
+      tags:
+        - Master List
+        - Mount
+      responses:
+        "200":
+          description: "Retrieve a list of mount objects."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Achievement"
+        default:
+          description: "Unexpected error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error-Schema"
+  /wow/pet/:
+    get:
+      summary: "Retrieve pet master list"
+      description: ""
+      parameters:
+        - $ref: "#/components/parameters/Jsonp-Param"
+        - $ref: "#/components/parameters/Locale-Param"
+      security:
+        - apikey: []
+      tags:
+        - Pet
+      responses:
+        "200":
+          description: "Retrieve an item set object."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Achievement"
+        default:
+          description: "Unexpected error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error-Schema"
+  /wow/pet/ability/{abilityid}:
+    get:
+      summary: "Retrieve pet ability"
+      description: ""
+      parameters:
+        - name: abilityid
+          in: path
+          description: "The `ability id` of the set."
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - $ref: "#/components/parameters/Jsonp-Param"
+        - $ref: "#/components/parameters/Locale-Param"
+      security:
+        - apikey: []
+      tags:
+        - Ability
+        - Pet
+      responses:
+        "200":
+          description: "Retrieve an item set object with an ability id."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Achievement"
+        default:
+          description: "Unexpected error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error-Schema"
+  /wow/pet/species/{speciesid}:
+    get:
+      summary: "Retrieve pet species"
+      description: ""
+      parameters:
+        - name: speciesid
+          in: path
+          description: "The `species id` of the set."
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - $ref: "#/components/parameters/Jsonp-Param"
+        - $ref: "#/components/parameters/Locale-Param"
+      security:
+        - apikey: []
+      tags:
+        - Pet
+        - Stats
+      responses:
+        "200":
+          description: "Retrieve a pet object of a species with an species id."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Achievement"
+        default:
+          description: "Unexpected error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error-Schema"
+  /wow/pet/stats/{speciesid}:
+    get:
+      summary: "Retrieve pet stats"
+      description: ""
+      parameters:
+        - name: speciesid
+          in: path
+          description: "The `species id` of the set."
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - $ref: "#/components/parameters/Jsonp-Param"
+        - $ref: "#/components/parameters/Locale-Param"
+      security:
+        - apikey: []
+      tags:
+        - Pet
+        - Stats
+      responses:
+        "200":
+          description: "Retrieve an item set object."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Achievement"
+        default:
+          description: "Unexpected error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error-Schema"
+  /wow/leaderboard/{bracket}:
+    get:
+      summary: "Retrieve pvp leaderboards"
+      description: ""
+      parameters:
+        - name: bracket
+          in: path
+          description: "The `bracket` of the leaderboard."
+          required: true
+          schema:
+             $ref: "#/components/schemas/ParmeterPvpBracket"
+        - $ref: "#/components/parameters/Jsonp-Param"
+        - $ref: "#/components/parameters/Locale-Param"
+      security:
+        - apikey: []
+      tags:
+        - Leaderboard
+        - Pvp
+      responses:
+        "200":
+          description: "Retrieve a leaderboard object."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Achievement"
+        default:
+          description: "Unexpected error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error-Schema"
+  /wow/quest/{questid}:
+    get:
+      summary: "Retrieve quest"
+      description: ""
+      parameters:
+        - name: questid
+          in: path
+          description: "The `id` of the quest."
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - $ref: "#/components/parameters/Jsonp-Param"
+        - $ref: "#/components/parameters/Locale-Param"
+      security:
+        - apikey: []
+      tags:
+        - Quest
+      responses:
+        "200":
+          description: "Retrieve a quest object."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Achievement"
+        default:
+          description: "Unexpected error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error-Schema"
+  /wow/realm/status:
+    get:
+      summary: "Retrieve realm status"
+      description: ""
+      parameters:
+        - $ref: "#/components/parameters/Jsonp-Param"
+        - $ref: "#/components/parameters/Locale-Param"
+      security:
+        - apikey: []
+      tags:
+        - Realm
+        - Status
+      responses:
+        "200":
+          description: "Retrieve list of realm objects."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Achievement"
+        default:
+          description: "Unexpected error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error-Schema"
+  /wow/recipe/{recipeid}:
+    get:
+      summary: "Retrieve recipe"
+      description: ""
+      parameters:
+        - name: recipeid
+          in: path
+          description: "The `id` of the recipe."
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - $ref: "#/components/parameters/Jsonp-Param"
+        - $ref: "#/components/parameters/Locale-Param"
+      security:
+        - apikey: []
+      tags:
+        - Quest
+      responses:
+        "200":
+          description: "Retrieve a recipe object."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Achievement"
+        default:
+          description: "Unexpected error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error-Schema"
+  /wow/spell/{spellid}:
+    get:
+      summary: "Retrieve spell"
+      description: ""
+      parameters:
+        - name: spellid
+          in: path
+          description: "The `id` of the spell."
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - $ref: "#/components/parameters/Jsonp-Param"
+        - $ref: "#/components/parameters/Locale-Param"
+      security:
+        - apikey: []
+      tags:
+        - Quest
+      responses:
+        "200":
+          description: "Retrieve a recipe object."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Achievement"
+        default:
+          description: "Unexpected error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error-Schema"
+  /wow/zone/:
+    get:
+      summary: "Retrieve zone master list"
+      description: ""
+      parameters:
+        - $ref: "#/components/parameters/Jsonp-Param"
+        - $ref: "#/components/parameters/Locale-Param"
+      security:
+        - apikey: []
+      tags:
+        - Master List
+        - Realm
+      responses:
+        "200":
+          description: "Retrieve a recipe object."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Achievement"
+        default:
+          description: "Unexpected error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error-Schema"
+  /wow/zone/{zoneid}:
+    get:
+      summary: "Retrieve zone"
+      description: ""
+      parameters:
+        - name: zoneid
+          in: path
+          description: "The `id` of the spell."
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - $ref: "#/components/parameters/Jsonp-Param"
+        - $ref: "#/components/parameters/Locale-Param"
+      security:
+        - apikey: []
+      tags:
+        - Quest
+      responses:
+        "200":
+          description: "Retrieve a zone object."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Achievement"
+        default:
+          description: "Unexpected error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error-Schema"
+components:
+  securitySchemes:
+    apikey:
+      type: apiKey
+      name: apikey
+      in: query
+  parameters:
+    Jsonp-Param:
+      name: jsonp
+      in: query
+      description: "Request data to be returned as a JsonP callback."
+      required: false
+      schema:
+        type: boolean
+    Locale-Param:
+      name: locale
+      in: query
+      description: "The locale to use in the response."
+      required: false
+      schema:
+        type: string
+        enum: ["de_DE", "en_US", "es_ES", "es_MX", "fr_FR", "it_IT", "ko_KR", "pt_BR", "pt_PT", "ru_RU", "zh_CN", "zh_TW"]
+  schemas:
+    # Field Schemas
+    Character-DefinitionSchema:
+      type: string
+      enum: ["achievements", "appearance", "feed", "guild", "hunterpets", "items", "mounts", "pets", "petslots",
+        "professions", "progression", "pvp", "quests", "reputation", "statistics", "stats", "talents", "titles",
+        "audit"]
+    Guild-DefintionSchema:
+      type: string
+      enum: ["achievements", "challenge", "members", "news"]
+    PvpBracket-DefinitionSchema:
+      type: string
+      enum: ["2v2", "3v3", "5v5", "rbg"]
+    # Error Schemas
+    Error-Schema:
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        fields:
+          type: string
+

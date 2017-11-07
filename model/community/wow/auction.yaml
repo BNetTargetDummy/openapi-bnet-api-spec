@@ -1,0 +1,46 @@
+Auction-Schema:
+  properties:
+    realms:
+      type: array
+      items:
+    auctions:
+      type: array
+      items:
+Auction.Realms-Schema:
+  properties:
+    name:
+      type: string
+    slug:
+      type: string
+Auction.Auctions-Schema:
+  properties:
+    auc:
+      type: integer
+      format: int32
+    item:
+      type: integer
+      format: int32
+    owner:
+      type: string
+    ownerRealm:
+      type: string
+    bid:
+      type: integer
+      format: int32
+    buyout:
+      type: integer
+      format: int32
+    quantity:
+      type: integer
+      format: int32
+    timeLeft:
+      type: string
+    rand:
+      type: integer
+      format: int32
+    seed:
+      type: integer
+      format: int32
+    context:
+      type: integer
+      format: int32

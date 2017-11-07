@@ -1,0 +1,64 @@
+ChallengeTime-FieldSchema:
+  properties:
+    hours:
+      type: integer
+      format: int32
+    isPositive:
+      type: boolean
+    milliseconds:
+      type: integer
+      format: int32
+    minutes:
+      type: integer
+      format: int32
+    seconds:
+      type: integer
+      format: int32
+    time:
+      type: integer
+      format: int32
+ChallengeRealmLeaderboard-Schema:
+  properties:
+    challenge:
+      type: object
+      properties:
+Challenge.Challenge:
+  properties:
+    groups:
+    map:
+    realm:
+Challenge.Challenge.Realm:
+  properties:
+    battlegroup:
+      type: string
+    connected_realms:
+      type: array
+      items:
+        type: string
+    locale:
+      type: string
+    name:
+      type: string
+    slug:
+      type: string
+    time:
+      type: string
+      format: timezone
+Challenge.Challenge.Map:
+  properties:
+    bronzeCriteria:
+      type: object
+    goldCriteria:
+    hasChallengeMode:
+    id:
+    name:
+    silverCritieria:
+    slug:
+Challenge.Challenge.Groups:
+  properties:
+    date:
+    faction:
+    isRecurring:
+ChallengeRegionLeaderboard:
+  properties:
+    challenge:
